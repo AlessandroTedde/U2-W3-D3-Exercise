@@ -1,7 +1,7 @@
 fetch("https://striveschool-api.herokuapp.com/books")
-  .then((books) => {
-    if (books.ok) {
-      return books.json();
+  .then((resp) => {
+    if (resp.ok) {
+      return resp.json();
     }
   })
   .then((books) => {
@@ -27,8 +27,9 @@ fetch("https://striveschool-api.herokuapp.com/books")
       button1.innerText = "Compra";
       const button2 = document.createElement("button");
       button2.type = "submit";
-      button2.classList.add("btn", "btn-warning");
+      button2.classList.add("btn", "btn-danger");
       button2.innerText = "Scarta";
+      button2.addEventListener("click", (event) => deleteCard(event, book));
       row.appendChild(col);
       col.appendChild(card);
       card.appendChild(img);
@@ -40,13 +41,10 @@ fetch("https://striveschool-api.herokuapp.com/books")
   })
   .catch((error) => console.log(error));
 
-const deleteCard = function () {
-  let allDeleteButtons = document.querySelectorAll(".btn-warning");
-  for (let i = 0; i < allDeleteButtons.length; i++) {
-    allDeleteButtons[i].addEventListener("click", function () {
-      this.parentNode.remove();
-    });
-  }
+const deleteCard = function (event, book) {
+  event.currentTarget.closest(".col").remove();
+  // book.title?
+  console.log(book.title);
 };
 
 const addToCart = function () {
@@ -60,15 +58,4 @@ const addToCart = function () {
           `);
     });
   }
-};
-
-const handleSubmit = function (e) {
-  e.preventDefault();
-  deleteCard();
-  addToCart();
-};
-
-window.onload = function () {
-  let form = document.querySelector("button");
-  form.addEventListener("submit", handleSubmit);
 };
